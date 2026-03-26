@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw_ecommerce
+    database: project-f24d43f9-d692-4550-a53
+    schema: proyek_22
+
+    tables:
+    - name: categories
+    - name: customers
+    - name: order_items
+    - name: orders
+    - name: products
