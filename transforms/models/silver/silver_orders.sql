@@ -22,6 +22,8 @@ with cleaned as (
     on c.order_id = d.order_id
     where order_id is not null
         and customer_id is not null
+        and created_at is not null
+        and updated_at is not null
 
 )
 

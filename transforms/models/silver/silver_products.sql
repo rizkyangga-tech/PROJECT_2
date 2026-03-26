@@ -7,7 +7,7 @@ with cleaned as (
         product_id,
         trim(lower(product_name)) as product_name,
         category_id,
-        trim(brand) as brand,
+        coalesce(trim(brand), 'unknown') as brand,
         cast(price as integer) as price,
         cast(created_at as timestamp) as created_at,
         cast(updated_at as timestamp) as updated_at,
@@ -16,6 +16,8 @@ with cleaned as (
     where product_id is not null
         and product_name is not null
         and category_id is not null
+        and created_at is not null
+        and updated_at is not null
 
 )
 

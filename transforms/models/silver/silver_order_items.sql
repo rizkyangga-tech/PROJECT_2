@@ -1,5 +1,5 @@
 {{ config(
-    materialized='view'
+    materialized='view' 
 ) }}
 
 with cleaned as(
@@ -17,6 +17,8 @@ with cleaned as(
     where order_item_id is not null
         and order_id is not null
         and product_id is not null
+        and created_at is not null
+        and updated_at is not null
 ),
 ranked AS (
     SELECT

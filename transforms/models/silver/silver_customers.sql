@@ -19,6 +19,8 @@ with ranked as(
         row_number() over(partition by customer_id order by updated_at desc nulls last) as rn
     from {{ref('bronze_customers')}}
     where customer_id is not null
+        and created_at is not null
+        and updated_at is not null
 )
 
 select
