@@ -1,5 +1,7 @@
 version: 2
+
 models:
+
   - name: silver_categories
     description: "tabel untuk menentukan kategori produk"
     columns:
@@ -7,153 +9,174 @@ models:
         tests:
           - not_null
           - unique
-          - relationships:
-              to: ref('silver_categories')
-              field: category_id
+
       - name: category_name
         tests:
           - not_null
           - unique
+
   - name: silver_customers
     columns:
       - name: customer_id
         tests:
           - not_null
           - unique
-          - relationships:
-              to: ref('silver_orders')
-              field: customer_id
+
       - name: gender
         tests:
           - accepted_values:
               values: ['female', 'male', 'unknown']
-              - dbt_utils.expression_is_true:
+
       - name: birth_date
         tests:
           - dbt_utils.expression_is_true:
-              expression: "birth_date ~ '^\\d{4}-\\d{2}-\\d{2}$'"
+              expression: "birth_date <= current_date"
+
       - name: created_at
         tests:
           - not_null
+
       - name: updated_at
         tests:
           - not_null
-  - name: silver_order_items
-      columns:
-      - name: order_item_id
-          tests:
-            - not_null
-            - unique
+          - dbt_utils.expression_is_true:
+              expression: "updated_at >= created_at"
+
+  - name: silver_orders
+    columns:
       - name: order_id
-          tests:
-            - not_null
-            - unique
+        tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_customers')
+              field: customer_id
+
+      - name: order_date
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "order_date <= current_date"
+
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['completed', 'cancelled', 'pending', 'unknown']
+
+      - name: payment_method
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['bank_transfer', 'e-wallet', 'credit_card', 'unknown']
+
+      - name: total_amount
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "total_amount >= 0"
+
+      - name: created_at
+        tests:
+          - not_null
+
+      - name: updated_at
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "updated_at >= created_at"
+
+  - name: silver_order_items
+    columns:
+      - name: order_item_id
+        tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        tests:
+          - not_null
           - relationships:
               to: ref('silver_orders')
-              field: order_id  
+              field: order_id
+
       - name: product_id
-          tests:
-            - not_null
-            - unique
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_products')
+              field: product_id
+
       - name: quantity
-          tests:
-            - not_null
-            - dbt_utils.expression_is_true:
-                expression: "quantity >0"
-            - dbt_utils.accepted_range:
-                min_value: 0
-                max_value: 1000000
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "quantity > 0"
+
       - name: price
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               expression: "price >= 0"
-          - dbt_utils.accepted_range:
-              min_value: 0
+
       - name: discount_amount
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               expression: "discount_amount >= 0"
-          - dbt_utils.accepted_range:
-              min_value: 0
+
       - name: subtotal
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "subtotal = price*quantity"
+              expression: "subtotal = price * quantity"
           - dbt_utils.expression_is_true:
               expression: "subtotal >= 0"
+
       - name: created_at
-        tests:
-          - not_null
-      - name: updated_at
         tests:
           - not_null
 
-   - name: silver_orders
-    columns:
-      - name: customer_id
-        tests:
-          - not_null
-          - unique       
-          - relationships:
-              to: ref('silver_categories')
-              field: customer_id
-      - name: order_date
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "order_date ~ '^\\d{4}-\\d{2}-\\d{2}$'"
-      - name: status
-        tests:
-          - not_null         
-          - accepted_values:
-              values: ['completed', 'cancelled', 'pending', 'unknown']
-      - name: payment_method
-        tests:
-          - not_null         
-          - accepted_values:
-              values: ['bank_transfer', 'e-wallet', 'credit_card', 'unknown']
-      - name: total_amount
-        tests:
-          - not_null
-          - dbt_utils.expression_is_true:
-              expression: "price >= 0"
-          - dbt_utils.accepted_range:
-              min_value: 0
-      - name: created_at
-        tests:
-          - not_null
       - name: updated_at
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: "updated_at >= created_at"
+
   - name: silver_products
-      columns:
+    columns:
       - name: product_id
-          tests:
-            - not_null
-            - unique
+        tests:
+          - not_null
+          - unique
+
       - name: product_name
         tests:
           - not_null
           - unique
-      - name: product_id
+
+      - name: category_id
         tests:
           - not_null
-          - unique
           - relationships:
               to: ref('silver_categories')
-              field: customer_id
+              field: category_id
+
       - name: price
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               expression: "price >= 0"
-          - dbt_utils.accepted_range:
-              min_value: 0
+
       - name: created_at
         tests:
           - not_null
+
       - name: updated_at
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: "updated_at >= created_at"
