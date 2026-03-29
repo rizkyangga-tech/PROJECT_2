@@ -42,10 +42,11 @@ Dengan kondisi data yang kompleks ini, proyek ini memberikan gambaran nyata baga
 SELECT *
 FROM customers
 LIMIT 10;
-customer_id	name	gender	birth_date	city	created_at	updated_at
-CUST_0001	Allison Hill	M	1970-05-28	Lake Curtis	2024-10-17 03:59:57	2024-10-29 03:59:57
-CUST_0002	Angie Henderson	Female	1957/10/6	East Jessetown	2024-05-30 19:19:05	2024-10-02 19:19:05
-CUST_0003	Matthew Gardner	Male	1970-03-21	Lawrencetown	2024-10-31 06:08:47	2025-01-10 06:08:47
-CUST_0004	Melissa Peterson	F	Null	PORT MATTHEW	2023-06-01 21:51:35	2024-05-12 21:51:35
+| customer_id | name             | gender | birth_date | city           | created_at          | updated_at          |
+| ----------- | ---------------- | ------ | ---------- | -------------- | ------------------- | ------------------- |
+| CUST_0001   | ALLISON HILL     | M      | 1970-05-28 | lake curtis    | 2024-10-17 03:59:57 | 2024-10-29 03:59:57 |
+| CUST_0002   | Angie Henderson  | Female | 1957/10/06 | NULL           | 2024-05-30 19:19:05 | 2024-10-02 19:19:05 |
+| CUST_0003   | Matthew Gardner  | Male   | 1970-03-21 | lawrencetown   | 2024-10-31 06:08:47 | 2025-01-10 06:08:47 |
+| CUST_0004   | Melissa Peterson | F      | NULL       | PORT MATTHEW   | 2023-06-01 21:51:35 | 2024-05-12 21:51:35 |
 
 ## Chapter 3 - 
