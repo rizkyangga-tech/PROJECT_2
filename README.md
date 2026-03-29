@@ -49,7 +49,7 @@ LIMIT 10;
 | CUST_0003   | Matthew Gardner  | Male   | 1970-03-21 | lawrencetown   | 2024-10-31 06:08:47 | 2025-01-10 06:08:47 |
 | CUST_0004   | Melissa Peterson | F      | NULL       | PORT MATTHEW   | 2023-06-01 21:51:35 | 2024-05-12 21:51:35 |
 
-## Chapter 3 - Architecture
+## Chapter 3 - Arsitektur Data
 
 Pipeline ini menggunakan modern airsitektur ELT yang mana raw data di ekstrak dari realtion database dan diproses melalui berbagai layer.
 
@@ -79,4 +79,81 @@ The system consists of the following components:
 
 ![ELT Pipeline Architecture](images/elt_architechture.png)
 
-## Chapter 4 - 
+## Chapter 4 - Struktur File
+
+```
+project-root
+│
+├── dags/
+│   └── pipeline.py           # Apache Airflow DAG definition
+│
+├── extract_load/
+│   ├── extract.py                # Extract data from PostgreSQL
+│   └── load.py                   # Load data to GCS / BigQuery
+│
+├── transform/                    # dbt project for transformations
+│   ├── models/
+|   |   |__bronze
+|   |
+│   │   ├── silver/               # Cleaned intermediate tables
+│   │   │   ├── silver_orders.sql
+│   │   │   └── silver_products.sql
+│   │   │
+│   │   └── gold/                 # Analytics-ready star schema
+│   │       ├── fact_sales.sql
+│   │       ├── dim_customers.sql
+│   │       └── dim_products.sql
+│   │
+│   ├── macros/                   # Reusable dbt macros
+│   ├── tests/                    # Data quality tests
+│   ├── seeds/                    # Static seed data
+│   ├── snapshots/                # Slowly changing dimension tracking
+│   ├── dbt_packages/             # Installed dbt dependencies
+│   ├── dbt_project.yml           # dbt project configuration
+│   └── profiles.yml              # dbt connection configuration
+│
+├── images/                       # Documentation images
+├── logs/                         # Pipeline execution logs
+├── .env                          # Environment variables
+├── .gitignore
+├── README.md
+└── venv/                         # Python virtual environment
+```
+
+## Chapter 4 - Cara Menjalanakan Pipeline
+
+## 0. Siapkan Seluruh Data, Folder, dan File yang ada di Github
+## 1. Setup Environment
+    -- bash --
+    > Py -3.11 -m venv venv
+    > venv\Scripts\Activate
+
+## 2. Setup DBT
+    -- bash --
+    > pip install dbt-core
+    > pip install dbt-bigquery
+
+## 3. Setup GCP
+### a. Siapkan Bucket
+> bucket digunakan untuk 
+
+### b. Siapkan Bigquery
+> siapkan schema bronze, silver dan gold serta tabelnya
+
+### c. Siapkan Composer
+> setup airflow
+
+## 4. Setup Airflow
+ ### a. Buat connection untuk postgres dan google clouds
+ airflow -> admin -> connection
+
+ ### b. upload file yang ada di local ke DAGs folder
+ > file dag, file transform, dan file extarct_load
+
+ ### c. Siapkan pypi packages
+ > pandas, pyarrow, psycopg2-binary, sqlalchemy, google-clouds-storage, requests, apache-airflow-providers-google, apache-airflow-providers-postgres, dbt-core, dbt-bigquery
+
+ ### d. buka airflow UI dan pencet trigger DAG
+ > di sini proses ekstrak, load, dan transform akan berjalan
+
+
