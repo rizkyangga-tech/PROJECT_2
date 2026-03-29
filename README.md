@@ -1,7 +1,7 @@
 # END TO END ELT PIPELINE
 ## Chapter 1 -Pengenalan Proyek
 
-Proyek ini bertujuan untuk membangun pipeline data yang andal untuk mengumpulkan, memproses, dan menyimpan data dari berbagai sumber sehingga siap digunakan untuk analisis dalam membuat dashboard ataupun untuk membuat model prediksi dan machine learning. Proyek ini mengimplementasikan end to end ELT (Extract, Load, dan Transform) dengan menggunakan pendekatan medalion Architecture (Bronze, Silver, dan Gold Layer) serta pemodelan dengan menggunakan star schema untuk kebutuhan analitik dan bussniness intelligence. 
+Proyek ini bertujuan untuk membangun pipeline data yang andal untuk mengumpulkan, memproses, dan menyimpan data dari berbagai sumber sehingga siap digunakan untuk analisis dalam membuat dashboard ataupun untuk membuat model prediksi dan machine learning. Proyek ini mengimplementasikan modern data pipeline, end to end ELT (Extract, Load, Transform) dengan menggunakan pendekatan medalion Architecture (Bronze, Silver, dan Gold Layer) serta pemodelan dengan menggunakan star schema untuk kebutuhan analitik dan bussniness intelligence. 
 
 Tujuan:
 > Membangun pipeline data ELT yang scalable & maintainable
@@ -51,26 +51,32 @@ LIMIT 10;
 
 ## Chapter 3 - Architecture
 
-The pipeline follows a modern ELT architecture where raw data is extracted from a relational database and processed through multiple data layers.
+Pipeline ini menggunakan modern airsitektur ELT yang mana raw data di ekstrak dari realtion database dan diproses melalui berbagai layer.
 
 The system consists of the following components:
 
 1. **Source Database**
-   A relational SQL database acts as the primary data source.
+   Sumber data yang mana data akan diekstrak dari sini
 
 2. **Data Extraction**
    Python scripts extract data from the source database.
+   Script Python akan mengekstrak data dari sumber database
 
-3. **Bronze Layer (Data Lake)**
-   Raw data is stored in Google Cloud Storage as the Bronze layer.
+3. **Data Lake**
+   Semua data mentah akan di load di sini agar biaya penyimpanan raw data jauh lebih murah.
 
-4. **Silver Layer (Data Warehouse)**
-   Data is loaded into BigQuery where basic cleaning and structuring occur.
+4. **Bronze Layer (Data Warehouse)**
+   Raw Data akan  disimpan ke dalam warehouse BigQuery, data yang disimpan di sini adalah data yang tidak duplikat dengan menggunakan incremental load.
 
-5. **Gold Layer (Analytics Layer)**
-   dbt transforms the data into analytical models using a star schema.
+5. **Silver Layer (Transform Layer)**
+   dengan menggunakan dbt, data kotor akan ditransform menjadi data yang bersih dari null, duplikat, dll
 
-6. **Orchestration**
-   Apache Airflow schedules and manages the pipeline execution.
+6. **Gold Layer (Transform Layer)**
+   Data yang sudah bersih disimpan ke dalam gold layer dengan star schema yang sudah siap digunakan oleh data analyst maupun data scientist
+
+7. **Orchestration**
+   Apache airflow akan menjadwalkan dan mengatur data pipeline sesuai dengan jam yang sudah ditentukan
 
 ![ELT Pipeline Architecture](images/elt_architechture.png)
+
+## Chapter 4 - 
