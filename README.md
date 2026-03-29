@@ -49,4 +49,28 @@ LIMIT 10;
 | CUST_0003   | Matthew Gardner  | Male   | 1970-03-21 | lawrencetown   | 2024-10-31 06:08:47 | 2025-01-10 06:08:47 |
 | CUST_0004   | Melissa Peterson | F      | NULL       | PORT MATTHEW   | 2023-06-01 21:51:35 | 2024-05-12 21:51:35 |
 
-## Chapter 3 - 
+## Chapter 3 - Architecture
+
+The pipeline follows a modern ELT architecture where raw data is extracted from a relational database and processed through multiple data layers.
+
+The system consists of the following components:
+
+1. **Source Database**
+   A relational SQL database acts as the primary data source.
+
+2. **Data Extraction**
+   Python scripts extract data from the source database.
+
+3. **Bronze Layer (Data Lake)**
+   Raw data is stored in Google Cloud Storage as the Bronze layer.
+
+4. **Silver Layer (Data Warehouse)**
+   Data is loaded into BigQuery where basic cleaning and structuring occur.
+
+5. **Gold Layer (Analytics Layer)**
+   dbt transforms the data into analytical models using a star schema.
+
+6. **Orchestration**
+   Apache Airflow schedules and manages the pipeline execution.
+
+![ELT Pipeline Architecture](images/elt_architechture.png)
