@@ -166,6 +166,17 @@ project-root
 
 
 ## Chapter 7 - Hasil
+ ### 1. Raw Data (GCS)
+ ![gcs- raw data](images/foto1.png)
 
-dataset postgres
+ ### 2. Bronze Layer (BIgQuery)
+  ![BigQuery - Bronze](images/foto2.png)
 
+ ### 3. Silver Layer (BIgQuery)
+  ![BigQuery - Silver](images/foto3.png)
+
+ ### 4. Gold Layer (BIgQuery)
+  ![BigQuery - Gold](images/foto4.png)
+
+ ### 5. Airflow Graph
+  ![Airflow - Graph](images/foto5.png)
