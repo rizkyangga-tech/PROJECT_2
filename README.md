@@ -90,7 +90,7 @@ Platform: BigQuery
 Model: Star Schema
 Tools: dbt
 
-![ELT Pipeline Architecture](images/elt_architechture.png)
+![ELT Pipeline Architecture](images/pipeline.png)
 
 ## Chapter 5 - Struktur File
 
