@@ -23,25 +23,29 @@ default_args = {
 
 def etl_pipeline():
 
-    # 1. Extract from Postgres
+    # 1. EXTRACT
+
     extract_postgres = BashOperator(
         task_id="extract_postgres",
-        bash_command="python /home/airflow/gcs/data/script/extract.py",
+        bash_command="python /home/airflow/gcs/data/extract_load/extract.py",
         sla=timedelta(hours=1)
     )
 
-    # 2. Upload ke GCS
+
+    # 2. UPLOAD TO GCS
+  
     upload_gcs = BashOperator(
         task_id="upload_to_gcs",
-        bash_command="python /home/airflow/gcs/data/script/load.py {{ ds }}",
+        bash_command="python /home/airflow/gcs/data/extract_load/load.py {{ ds }}",
         sla=timedelta(hours=1)
     )
 
-    # 3. Load ke BigQuery
+    # 3. LOAD TO BIGQUERY
+
     tables = [
-        "categories_2",
-        "customers_2",
-        "order_items_2",
+        "categories",
+        "customers",
+        "order_items",
         "orders",
         "products",
     ]
@@ -65,19 +69,27 @@ def etl_pipeline():
 
         load_tasks.append(load)
 
-    # 4. dbt transform
+    # 4. DBT TRANSFORM
+
     dbt_build = BashOperator(
         task_id="dbt_build",
-        bash_command="dbt build --target prod",
-        cwd="/home/airflow/gcs/data/transform",
+        bash_command="""
+        cd /home/airflow/gcs/data/transforms &&
+        echo "=== DBT PROJECT ===" &&
+        cat dbt_project.yml &&
+        dbt deps &&
+        dbt build --target prod --profiles-dir .
+        """,
         sla=timedelta(hours=2)
     )
 
-    # 5. Pipeline order
+    # 5. PIPELINE ORDER
+
     extract_postgres >> upload_gcs
 
     for task in load_tasks:
         upload_gcs >> task
         task >> dbt_build
+
 
 etl_dag = etl_pipeline()
