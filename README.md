@@ -49,37 +49,50 @@ LIMIT 10;
 | CUST_0003   | Matthew Gardner  | Male   | 1970-03-21 | lawrencetown   | 2024-10-31 06:08:47 | 2025-01-10 06:08:47 |
 | CUST_0004   | Melissa Peterson | F      | NULL       | PORT MATTHEW   | 2023-06-01 21:51:35 | 2024-05-12 21:51:35 |
 
-## Chapter 3 - Arsitektur Data
+## Chapter 3 - Tech Stack
+| Category | Tool | Purpose |
+|--------|--------|--------|
+| Programming | Python | Data extraction and loading scripts |
+| Data Source | PostgreSQL | Operational database used as the source system |
+| Data Lake | Google Cloud Storage (GCS) | Storage for raw ingested data (Bronze layer) |
+| Data Warehouse | BigQuery | Analytical warehouse for querying processed data |
+| Data Transformation | dbt | SQL-based transformations, data tests, and incremental models |
+| Orchestration | Apache Airflow | Scheduling, retries, backfilling, and SLA monitoring |
+| Data Modeling | Star Schema | Analytical data model for fact and dimension tables |
+| Data Architecture | Medallion Architecture | Layered pipeline design (Bronze → Silver → Gold) |
+| Version Control | Git & GitHub | Source code management and collaboration |
+
+## Chapter 4 - Arsitektur Data
 
 Pipeline ini menggunakan modern airsitektur ELT yang mana raw data di ekstrak dari realtion database dan diproses melalui berbagai layer.
 
-The system consists of the following components:
+### 1. Extract (Data Source)
+Sumber data: PostgreSQL (RDBMS)
+Tools: Python
+Proses: Mengambil data dari database menggunakan query
 
-1. **Source Database**
-   Sumber data yang mana data akan diekstrak dari sini
+### 2. Data Lake (Raw Layer / Bronze)
+Storage: Google Cloud Storage
+Tipe data: Raw (belum diproses)
 
-2. **Data Extraction**
-   Python scripts extract data from the source database.
-   Script Python akan mengekstrak data dari sumber database
+### 3. Data Warehouse - Bronze
+Platform: BigQuery
+Tools: dbt
+Metode: Incremental load
 
-3. **Data Lake**
-   Semua data mentah akan di load di sini agar biaya penyimpanan raw data jauh lebih murah.
+### 4. Data Warehouse - Silver
+Platform: BigQuery
+Tools: dbt
+Proses: Cleaning, Filtering, Standardisasi, Enrichment
 
-4. **Bronze Layer (Data Warehouse)**
-   Raw Data akan  disimpan ke dalam warehouse BigQuery, data yang disimpan di sini adalah data yang tidak duplikat dengan menggunakan incremental load.
-
-5. **Silver Layer (Transform Layer)**
-   dengan menggunakan dbt, data kotor akan ditransform menjadi data yang bersih dari null, duplikat, dll
-
-6. **Gold Layer (Transform Layer)**
-   Data yang sudah bersih disimpan ke dalam gold layer dengan star schema yang sudah siap digunakan oleh data analyst maupun data scientist
-
-7. **Orchestration**
-   Apache airflow akan menjadwalkan dan mengatur data pipeline sesuai dengan jam yang sudah ditentukan
+### 5. Data Warehouse - Gold
+Platform: BigQuery
+Model: Star Schema
+Tools: dbt
 
 ![ELT Pipeline Architecture](images/elt_architechture.png)
 
-## Chapter 4 - Struktur File
+## Chapter 5 - Struktur File
 
 ```
 project-root
@@ -93,16 +106,12 @@ project-root
 │
 ├── transform/                    # dbt project for transformations
 │   ├── models/
-|   |   |__bronze
-|   |
+|   |   |__bronze                 # RAW DATA
+|   |   |
 │   │   ├── silver/               # Cleaned intermediate tables
-│   │   │   ├── silver_orders.sql
-│   │   │   └── silver_products.sql
 │   │   │
 │   │   └── gold/                 # Analytics-ready star schema
-│   │       ├── fact_sales.sql
-│   │       ├── dim_customers.sql
-│   │       └── dim_products.sql
+│   │       
 │   │
 │   ├── macros/                   # Reusable dbt macros
 │   ├── tests/                    # Data quality tests
@@ -119,8 +128,7 @@ project-root
 ├── README.md
 └── venv/                         # Python virtual environment
 ```
-
-## Chapter 4 - Cara Menjalanakan Pipeline
+## Chapter 6 - Cara Menjalanakan Pipeline
 
 ## 0. Siapkan Seluruh Data, Folder, dan File yang ada di Github
 ## 1. Setup Environment
@@ -156,4 +164,8 @@ project-root
  ### d. buka airflow UI dan pencet trigger DAG
  > di sini proses ekstrak, load, dan transform akan berjalan
 
+
+## Chapter 7 - Hasil
+
+dataset postgres
 
