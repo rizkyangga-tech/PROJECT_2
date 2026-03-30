@@ -36,10 +36,8 @@ def upload_file_to_gcs(file_path: str, table_name: str, ds: str):
         logger.exception("Upload ke GCS gagal")
         raise
 
-
-# =============================
 # MAIN SCRIPT
-# =============================
+
 if __name__ == "__main__":
 
     logger.info("Load script started")
@@ -62,4 +60,5 @@ if __name__ == "__main__":
             upload_file_to_gcs(file_path, table, ds)
 
         except FileNotFoundError:
-            logger.warning(f"File tidak ditemukan: {file_path}")
+            logger.error(f"File tidak ditemukan: {file_path}")
+            raise
