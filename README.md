@@ -1,9 +1,16 @@
 # END TO END ELT PIPELINE
 ## Chapter 1 -Pengenalan Proyek
 
-Proyek ini bertujuan untuk membangun pipeline data yang andal untuk mengumpulkan, memproses, dan menyimpan data dari berbagai sumber sehingga siap digunakan untuk analisis dalam membuat dashboard ataupun untuk membuat model prediksi dan machine learning. Proyek ini mengimplementasikan modern data pipeline, end to end ELT (Extract, Load, Transform) dengan menggunakan pendekatan medalion Architecture (Bronze, Silver, dan Gold Layer) serta pemodelan dengan menggunakan star schema untuk kebutuhan analitik dan bussniness intelligence. 
+Proyek ini bertujuan untuk membangun pipeline data yang andal untuk mengumpulkan, memproses, dan menyimpan data dari berbagai sumber sehingga siap digunakan untuk analisis dalam membuat dashboard ataupun untuk membuat model prediksi dan machine learning. Proyek ini mengimplementasikan modern data pipeline, end to end ELT (Extract, Load, Transform) dengan menggunakan pendekatan medalion Architecture (Bronze, Silver, dan Gold Layer) serta pemodelan dengan menggunakan star schema untuk kebutuhan analitik dan bussniness intelligence.
 
-Tujuan:
+Pipeline ini digunakan untuk mendukung analisis bisnis e-commerce, seperti:
+
+> Analisis revenue dan pertumbuhan penjualan
+> Identifikasi produk paling laris
+> Customer segmentation berdasarkan spending
+> Retention & repeat order analysis
+
+Tujuan dibangunnya pipeline ini:
 > Membangun pipeline data ELT yang scalable & maintainable
 > Mengolah data mentah menjadi data siap analitik
 > Mengimplementasikan best practice data warehouse (star schema)
@@ -62,7 +69,91 @@ LIMIT 10;
 | Data Architecture | Medallion Architecture | Layered pipeline design (Bronze → Silver → Gold) |
 | Version Control | Git & GitHub | Source code management and collaboration |
 
-## Chapter 4 - Arsitektur Data
+## Chapter 4 - Design Decission
+1. Arsitektur Data (ELT)
+
+Alasan pemilihan:
+> Memanfaatkan compute power dari BigQuery
+> Transformasi dapat dilakukan langsung dengan SQL (lebih fleksibel)
+> Data mentah tetap tersimpan untuk reprocessing
+
+Keuntungan:
+> Lebih scalable untuk data besar
+> Debugging lebih mudah
+> Pipeline lebih sederhana di awal
+
+2. Medallion Architecture
+
+Alasan pemilihan:
+> Memisahkan raw, clean, dan business layer
+> Mempermudah debugging dan maintenance
+> Mendukung pipeline yang modular
+
+Keuntungan:
+> Data lebih terstruktur
+> Mudah tracking error antar layer
+> Reprocessing lebih aman
+
+3. Data Modeling (Star Schema)
+
+Alasan pemilihan:
+> Cocok untuk kebutuhan analitik (OLAP)
+> Query lebih sederhana (fact → dimension)
+> Optimal untuk agregasi
+
+Keuntungan:
+> Performa query lebih cepat
+> Mudah dipahami analyst
+> Mendukung dashboard
+
+4. Incremental Processing
+
+Alasan pemilihan:
+> Menghindari full refresh
+> Mengurangi biaya query
+> Mempercepat processing data
+
+Keuntungan:
+> Lebih efisien secara cost dan waktu
+> Cocok untuk data besar
+
+5. Data Quality & Testing (dbt)
+
+Alasan pemilihan:
+> Validasi data otomatis
+> Menjamin kualitas sebelum masuk Gold
+> Terintegrasi dengan pipeline
+
+Keuntungan:
+> Mencegah error di downstream
+> Mudah maintain
+
+6. Orchestration (Airflow)
+
+Alasan pemilihan:
+> Standar industri untuk scheduling pipeline
+> Mendukung dependency antar task
+> Memiliki fitur monitoring & retry
+
+Keuntungan:
+> Pipeline terjadwal otomatis
+> Mudah monitoring
+> Reliable untuk production
+
+7. Storage GCS
+
+Alasan pemilihan:
+> Biaya rendah
+> Skalabilitas tinggi
+> Cocok untuk data mentah
+
+Data Warehouse (BigQuery)
+> Alasan pemilihan:
+> Serverless (tanpa manage infrastruktur)
+> Performa tinggi untuk analytics
+> Auto scaling
+
+## Chapter 5 - Arsitektur Data
 
 Pipeline ini menggunakan modern airsitektur ELT yang mana raw data di ekstrak dari realtion database dan diproses melalui berbagai layer.
 
@@ -92,7 +183,7 @@ Tools: dbt
 
 ![ELT Pipeline Architecture](images/pipeline2.png)
 
-## Chapter 5 - Struktur File
+## Chapter 6 - Struktur File
 
 ```
 project-root
@@ -128,7 +219,7 @@ project-root
 ├── README.md
 └── venv/                         # Python virtual environment
 ```
-## Chapter 6 - Cara Menjalanakan Pipeline
+## Chapter 7 - Cara Menjalanakan Pipeline
 
 ## 0. Siapkan Seluruh Data, Folder, dan File yang ada di Github
 ## 1. Setup Environment
@@ -165,7 +256,7 @@ project-root
  > di sini proses ekstrak, load, dan transform akan berjalan
 
 
-## Chapter 7 - Hasil
+## Chapter 8 - Hasil
  ### 1. Raw Data (GCS)
  ![gcs- raw data](images/foto1.png)
 
