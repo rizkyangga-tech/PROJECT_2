@@ -5,43 +5,43 @@ Proyek ini bertujuan untuk membangun pipeline data yang andal untuk mengumpulkan
 
 Pipeline ini digunakan untuk mendukung analisis bisnis e-commerce, seperti:
 
-> Analisis revenue dan pertumbuhan penjualan
-> Identifikasi produk paling laris
-> Customer segmentation berdasarkan spending
-> Retention & repeat order analysis
+- Analisis revenue dan pertumbuhan penjualan
+- Identifikasi produk paling laris
+- Customer segmentation berdasarkan spending
+- Retention & repeat order analysis
 
 Tujuan dibangunnya pipeline ini:
-> Membangun pipeline data ELT yang scalable & maintainable
-> Mengolah data mentah menjadi data siap analitik
-> Mengimplementasikan best practice data warehouse (star schema)
-> Mendukung dashboard dan analisis bisnis
+- Membangun pipeline data ELT yang scalable & maintainable
+- Mengolah data mentah menjadi data siap analitik
+- Mengimplementasikan best practice data warehouse (star schema)
+- Mendukung dashboard dan analisis bisnis
 
 ## Chapter 2 - Dataset
 
 Dataset yang digunakan dalam proyek ini merupakan data E-Commerce sintetis yang dihasilkan menggunakan library Python Faker. Dataset terdiri dari beberapa tabel utama yang merepresentasikan proses bisnis transaksi, yaitu:
 
-> customers → data pelanggan
-> orders → data transaksi
-> item_orders → detail item dalam setiap transaksi
-> products → data produk
-> categories → kategori produk
+- customers → data pelanggan
+- orders → data transaksi
+- item_orders → detail item dalam setiap transaksi
+- products → data produk
+- categories → kategori produk
 
 ### Kondisi Data
 Data yang digunakan dalam proyek ini tidak dalam kondisi bersih (dirty data) dan secara sengaja dibuat mendekati kondisi di dunia nyata (production-like). Beberapa permasalahan yang terdapat dalam dataset antara lain:
 
 Data duplikat
-> Nilai kosong (missing values)
-> Inkonsistensi format data
-> Tipe data yang tidak sesuai
-> Kesalahan logika bisnis
-> Typo pada beberapa field
-> Tujuan Penggunaan Dataset
+- Nilai kosong (missing values)
+- Inkonsistensi format data
+- Tipe data yang tidak sesuai
+- Kesalahan logika bisnis
+- Typo pada beberapa field
+- Tujuan Penggunaan Dataset
 
 Dataset ini dirancang untuk:
-> Mensimulasikan permasalahan data di dunia nyata
-> Menguji proses data cleaning dan transformation
-> Mengimplementasikan praktik terbaik dalam data engineering
-> Membangun pipeline yang robust dan siap produksi
+- Mensimulasikan permasalahan data di dunia nyata
+- Menguji proses data cleaning dan transformation
+- Mengimplementasikan praktik terbaik dalam data engineering
+- Membangun pipeline yang robust dan siap produksi
 
 Dengan kondisi data yang kompleks ini, proyek ini memberikan gambaran nyata bagaimana seorang data engineer menangani data dari tahap mentah hingga siap digunakan untuk analisis.
 
@@ -73,85 +73,85 @@ LIMIT 10;
 1. Arsitektur Data (ELT)
 
 Alasan pemilihan:
-> Memanfaatkan compute power dari BigQuery
-> Transformasi dapat dilakukan langsung dengan SQL (lebih fleksibel)
-> Data mentah tetap tersimpan untuk reprocessing
+- Memanfaatkan compute power dari BigQuery
+- Transformasi dapat dilakukan langsung dengan SQL (lebih fleksibel)
+- Data mentah tetap tersimpan untuk reprocessing
 
 Keuntungan:
-> Lebih scalable untuk data besar
-> Debugging lebih mudah
-> Pipeline lebih sederhana di awal
+- Lebih scalable untuk data besar
+- Debugging lebih mudah
+- Pipeline lebih sederhana di awal
 
 2. Medallion Architecture
 
 Alasan pemilihan:
-> Memisahkan raw, clean, dan business layer
-> Mempermudah debugging dan maintenance
-> Mendukung pipeline yang modular
+- Memisahkan raw, clean, dan business layer
+- Mempermudah debugging dan maintenance
+- Mendukung pipeline yang modular
 
 Keuntungan:
-> Data lebih terstruktur
-> Mudah tracking error antar layer
-> Reprocessing lebih aman
+- Data lebih terstruktur
+- Mudah tracking error antar layer
+- Reprocessing lebih aman
 
 3. Data Modeling (Star Schema)
 
 Alasan pemilihan:
-> Cocok untuk kebutuhan analitik (OLAP)
-> Query lebih sederhana (fact → dimension)
-> Optimal untuk agregasi
+- Cocok untuk kebutuhan analitik (OLAP)
+- Query lebih sederhana (fact → dimension)
+- Optimal untuk agregasi
 
 Keuntungan:
-> Performa query lebih cepat
-> Mudah dipahami analyst
-> Mendukung dashboard
+- Performa query lebih cepat
+- Mudah dipahami analyst
+- Mendukung dashboard
 
 4. Incremental Processing
 
 Alasan pemilihan:
-> Menghindari full refresh
-> Mengurangi biaya query
-> Mempercepat processing data
+- Menghindari full refresh
+- Mengurangi biaya query
+- Mempercepat processing data
 
 Keuntungan:
-> Lebih efisien secara cost dan waktu
-> Cocok untuk data besar
+- Lebih efisien secara cost dan waktu
+- Cocok untuk data besar
 
 5. Data Quality & Testing (dbt)
 
 Alasan pemilihan:
-> Validasi data otomatis
-> Menjamin kualitas sebelum masuk Gold
-> Terintegrasi dengan pipeline
+- Validasi data otomatis
+- Menjamin kualitas sebelum masuk Gold
+- Terintegrasi dengan pipeline
 
 Keuntungan:
-> Mencegah error di downstream
-> Mudah maintain
+- Mencegah error di downstream
+- Mudah maintain
 
 6. Orchestration (Airflow)
 
 Alasan pemilihan:
-> Standar industri untuk scheduling pipeline
-> Mendukung dependency antar task
-> Memiliki fitur monitoring & retry
+- Standar industri untuk scheduling pipeline
+- Mendukung dependency antar task
+- Memiliki fitur monitoring & retry
 
 Keuntungan:
-> Pipeline terjadwal otomatis
-> Mudah monitoring
-> Reliable untuk production
+- Pipeline terjadwal otomatis
+- Mudah monitoring
+- Reliable untuk production
 
 7. Storage GCS
 
 Alasan pemilihan:
-> Biaya rendah
-> Skalabilitas tinggi
-> Cocok untuk data mentah
+- Biaya rendah
+- Skalabilitas tinggi
+- Cocok untuk data mentah
 
 Data Warehouse (BigQuery)
-> Alasan pemilihan:
-> Serverless (tanpa manage infrastruktur)
-> Performa tinggi untuk analytics
-> Auto scaling
+- Alasan pemilihan:
+- Serverless (tanpa manage infrastruktur)
+- Performa tinggi untuk analytics
+- Auto scaling
 
 ## Chapter 5 - Arsitektur Data
 
