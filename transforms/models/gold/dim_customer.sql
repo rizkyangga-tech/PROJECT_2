@@ -6,4 +6,4 @@ SELECT
     gender,
     city,
     birth_date
-FROM {{ ref('stg_customers') }}
+FROM {{ ref('silver_customers') }}

@@ -11,9 +11,9 @@ select
     c.quantity,
     c.price,
     c.discount_amount,
-    c.subtotal
+    c.subtotal,
     (c.price * c.quantity) as gross_profit,
-    (cprice * c.quantity - cdiscount_amount) as net_value
+    (c.price * c.quantity - c.discount_amount) as net_value
 
 FROM {{ ref('silver_order_items') }} as c
 JOIN {{ ref('silver_orders') }} as d
