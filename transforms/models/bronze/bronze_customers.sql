@@ -1,14 +1,14 @@
- {{ config(
+{{ config(
     materialized='incremental',
-    unique_key='customers'
+    unique_key='customer_id'
 ) }}
 
 select *
-from {{source('proyek_22', 'customers')}}
- 
-    {% if is_incremental() %}
-    where updated_at > coalesce(
-    (select max(updated_at) from {{ this }}),
-    '1900-01-01'
-) - INTERVAL 1 DAY
-    {% endif %}
+from {{ source('proyek_22', 'customers') }}
+
+{% if is_incremental() %}
+where updated_at > (
+    select max(updated_at)
+    from {{ this }}
+)
+{% endif %}

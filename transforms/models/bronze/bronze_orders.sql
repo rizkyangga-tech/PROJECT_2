@@ -3,11 +3,12 @@
     unique_key='order_id'
 ) }}
 
-SELECT *
-FROM {{ source('proyek_22', 'orders') }}
+select *
+from {{ source('proyek_22', 'orders') }}
 
-    {% if is_incremental() %}
-        WHERE updated_at > (
-            SELECT MAX(updated_at) FROM {{ this }}
-        ) - INTERVAL 1 DAY
-    {% endif %}
+{% if is_incremental() %}
+where updated_at > (
+    select max(updated_at)
+    from {{ this }}
+)
+{% endif %}

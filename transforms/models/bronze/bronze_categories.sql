@@ -1,6 +1,10 @@
 {{ config(
-    materialized='incremental',
-    unique_key='categories_id'
+    materialized='table'
 ) }}
-select *
-from {{source('proyek_22', 'categories')}}
+
+with source_data as (
+    select *
+    from {{ source('proyek_22', 'categories') }}
+)
+select *    
+from source_data
