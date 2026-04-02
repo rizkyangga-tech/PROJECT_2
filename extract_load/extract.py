@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 TMP_DIR = "/home/airflow/gcs/data/tmp"
 SCHEMA = "proyek_22"
 
-
 # FUNCTION
 
 def extract_table(table_name):
