@@ -1,0 +1,24 @@
+name: transforms
+version: 1.0
+config-version: 2
+
+profile: transforms
+
+model-paths: ["models"]
+
+models:
+  transforms:
+
+    +materialized: view
+
+    bronze:
+      +dataset: bronze_ecommerce
+      +materialized: incremental
+
+    silver:
+      +dataset: silver_ecommerce
+      +materialized: view
+
+    gold:
+      +dataset: gold_ecommerce
+      +materialized: table
